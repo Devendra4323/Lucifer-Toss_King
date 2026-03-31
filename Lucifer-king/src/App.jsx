@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-// Changed the import style below to be safer
 import ReactPixel from 'react-facebook-pixel'; 
 import './App.css';
 import lucifer from '../public/lucifer-king.jpeg';
@@ -9,7 +8,6 @@ function App() {
   const adminLink = "https://t.me/your_admin_username"; 
 
   useEffect(() => {
-    // We add a check to make sure the library loaded correctly
     if (ReactPixel && typeof ReactPixel.init === 'function') {
       ReactPixel.init('1682748616410619', {
         autoConfig: true,
@@ -22,40 +20,44 @@ function App() {
   }, []);
 
   const trackJoinClick = () => {
-    // Safety check before tracking
-    if (ReactPixel && typeof ReactPixel.track === 'function') {
-      ReactPixel.track('Lead', {
+    if (window.fbq) {
+      window.fbq('track', 'Lead', {
         content_name: 'Telegram Join',
       });
+    } else {
+      console.log("Meta Pixel (fbq) is not loaded yet.");
     }
   };
-  
 
   return (
     <div className="landing-container">
-      {/* Dynamic Background Layers */}
       <div className="stadium-overlay"></div>
       <div className="vignette"></div>
 
       <main className="main-content">
-        {/* Hero Section */}
         <div className="hero-section">
-          <img src={lucifer} className='image'/>
+          <img src={lucifer} className='image' alt="Lucifer King" />
           <h1 className="main-title">LUCIFER</h1>
           <h2 className="sub-title">TOSS KING</h2>
           <div className="badge">🏆 #1 FANTASY PREDICTOR</div>
         </div>
 
-      <div className="action-area">
-          <a href={telegramMainLink} target="_blank" className="btn-main">
+        <div className="action-area">
+          {/* FIXED: Added onClick={trackJoinClick} below */}
+          <a 
+            href={telegramMainLink} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="btn-main"
+            onClick={trackJoinClick}
+          >
             JOIN TELEGRAM NOW
           </a>
-          <a href={adminLink} target="_blank" className="btn-admin">
+          <a href={adminLink} target="_blank" rel="noopener noreferrer" className="btn-admin">
             MESSAGE ADMIN
           </a>
         </div>
 
-        {/* Features Grid */}
         <div className="features-grid">
           <div className="feature-card">
             <span className="icon">📊</span>
@@ -74,8 +76,6 @@ function App() {
           </div>
         </div>
 
-        {/* Action Buttons */}
-        
         <footer className="footer-note">
           Join 50K+ Winners Today • Free & Premium Access
         </footer>
