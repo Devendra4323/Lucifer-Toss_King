@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+// Changed the import style below to be safer
+import ReactPixel from 'react-facebook-pixel'; 
 import './App.css';
 import lucifer from '../public/lucifer-king.jpeg';
+
 function App() {
   const telegramMainLink = "https://t.me/+GPfdWnsvVK01OTll";
   const adminLink = "https://t.me/your_admin_username"; 
+
+  useEffect(() => {
+    // We add a check to make sure the library loaded correctly
+    if (ReactPixel && typeof ReactPixel.init === 'function') {
+      ReactPixel.init('1682748616410619', {
+        autoConfig: true,
+        debug: false,
+      });
+      ReactPixel.pageView();
+    } else {
+      console.log("ReactPixel is still loading or not found");
+    }
+  }, []);
+
+  const trackJoinClick = () => {
+    // Safety check before tracking
+    if (ReactPixel && typeof ReactPixel.track === 'function') {
+      ReactPixel.track('Lead', {
+        content_name: 'Telegram Join',
+      });
+    }
+  };
+  
 
   return (
     <div className="landing-container">
